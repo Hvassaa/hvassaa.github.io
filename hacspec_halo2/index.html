@@ -13,12 +13,17 @@
             macros: {
                 "\\prover": "\\mathcal{P}",
                 "\\verifier": "\\mathcal{V}",
+                "\\relation": "\\mathcal{R}",
+                "\\zero": "\\mathcal{O}",
                 "\\field": "\\mathbb{F}",
                 "\\group": "\\mathbb{G}",
                 "\\halo": "\\mathbf{Halo}",
                 "\\setup": "\\textrm{Setup}",
                 "\\pp": "\\textrm{pp}",
                 "\\innerprod": "\\langle #1,#2 \\rangle",
+                "\\sec": "\\lambda",
+                "\\lo": "_\{lo\}",
+                "\\hi": "_\{hi\}",
             }
         });
     });
@@ -29,26 +34,9 @@
 domain $D = (\omega^0, \omega^1, …, \omega^{n - 1})$ with $t(X) = X^n - 1$ the
 vanishing polynomial over this domain. Let $n_g, n_a, n_e$ be positive integers with $n_a, n_e \lt n$ and $n_g \geq 4$.
 We present an interactive argument $\halo = (\setup, \prover, \verifier)$ for
-the relation
-$$
-\relation = \left{
-\begin{array}{ll}
-&amp;\left(
-\begin{array}{ll}
-\left(
-g(X, C_0, …, C_{n_a - 1}, a_0(X), …, a_{n_a - 1}\left(X, C_0, …, C_{n_a - 1}, a_0(X), …, a_{n_a - 2}(X) \right))
-\right); \
-\left(
-a_0(X), a_1(X, C_0, a_0(X)), …, a_{n_a - 1}\left(X, C_0, …, C_{n_a - 1}, a_0(X), …, a_{n_a - 2}(X) \right)
-\right)
-\end{array}
-\right) : \
-\
-&amp; g(\omega^i, \cdots) = 0 , , , , \forall i \in [0, 2^k)
-\end{array}
-\right}
-$$
-where $a_0, a_1, …, a_{n_a - 1}$ are (multivariate) polynomials with degree $n - 1$ in $X$ and $g$ has degree $n_g(n - 1)$ at most in any indeterminates $X, C_0, C_1, …$.</p>
+the relation</p>
+<p>$$ \relation = \left\{ \begin{array}{ll} &amp;\left( \begin{array}{ll} \left( g(X, C_0, …, C_{n_a - 1}, a_0(X), …, a_{n_a - 1}\left(X, C_0, …, C_{n_a - 1}, a_0(X), …, a_{n_a - 2}(X) \right)) \right); \ \left( a_0(X), a_1(X, C_0, a_0(X)), …, a_{n_a - 1}\left(X, C_0, …, C_{n_a - 1}, a_0(X), …, a_{n_a - 2}(X) \right) \right) \end{array} \right) : \ \ &amp; g(\omega^i, \cdots) = 0 , , , , \forall i \in [0, 2^k) \end{array} \right\} $$</p>
+<p>where $a_0, a_1, …, a_{n_a - 1}$ are (multivariate) polynomials with degree $n - 1$ in $X$ and $g$ has degree $n_g(n - 1)$ at most in any indeterminates $X, C_0, C_1, …$.</p>
 <p>$\setup(\sec)$ returns $\pp = (\group, \field, \mathbf{G} \in \group^n, U, W \in \group)$.</p>
 <p>For all $i \in [0, n_a)$:</p>
 <ul>
@@ -57,47 +45,47 @@ where $a_0, a_1, …, a_{n_a - 1}$ are (multivariate) polynomials with degree $n
 <li>Let $\sigma(i) = \mathbf{q}_j$ when $\mathbf{q}_j = \mathbf{p_i}$.</li>
 </ul>
 <p>Let $n_q \leq n_a$ denote the size of $\mathbf{q}$, and let $n_e$ denote the size of every $\mathbf{p_i}$ without loss of generality.</p>
-<p>In the following protocol, we take it for granted that each polynomial $a_i(X, \cdots)$ is defined such that $n_e + 1$ blinding factors are freshly sampled by the prover and are each present as an evaluation of $a_i(X, \cdots)$ over the domain $D$. In all of the following, the verifier’s challenges cannot be zero or an element in $D$, and some additional limitations are placed on specific challenges as well.</p>
+<p>In the following protocol, we take it for granted that each polynomial $a_i(X, \cdots)$ is defined such that $n_e + 1$ blinding factors are freshly sampled by the prover and are each present as an evaluation of $a_i(X, \cdots)$ over the domain $D$. In all of the following, the verifier^\primes challenges cannot be zero or an element in $D$, and some additional limitations are placed on specific challenges as well.</p>
 <div><table><thead><tr><th>Spec</th><th>Step</th><th>Protocol</th></tr></thead><tbody>
 <tr><td><a href="fn.step_1.html" title="step_1">step_1</a></td><td>1</td><td>$\prover$ and $\verifier$ proceed in the following $n_a$ rounds of interaction, where in round $j$ (starting at $0$)</td></tr>
-<tr><td></td><td></td><td>* $\prover$ sets $a’<em>j(X) = a_j(X, c_0, c_1, …, c</em>{j - 1}, a_0(X, \cdots), …, a_{j - 1}(X, \cdots, c_{j - 1}))$</td></tr>
-<tr><td></td><td></td><td>* $\prover$ sends a hiding commitment $A_j = \innerprod{\mathbf{a’}}{\mathbf{G}} + [\cdot] W$ where $\mathbf{a’}$ are the coefficients of the univariate polynomial $a’_j(X)$ and $\cdot$ is some random, independently sampled blinding factor elided for exposition. (This elision notation is used throughout this protocol description to simplify exposition.)</td></tr>
+<tr><td></td><td></td><td>* $\prover$ sets $a^\prime_j(X) = a_j(X, c_0, c_1, …, c_{j - 1}, a_0(X, \cdots), …, a_{j - 1}(X, \cdots, c_{j - 1}))$</td></tr>
+<tr><td></td><td></td><td>* $\prover$ sends a hiding commitment $A_j = \innerprod{\mathbf{a^\prime}}{\mathbf{G}} + [\cdot] W$ where $\mathbf{a^\prime}$ are the coefficients of the univariate polynomial $a^\prime_j(X)$ and $\cdot$ is some random, independently sampled blinding factor elided for exposition. (This elision notation is used throughout this protocol description to simplify exposition.)</td></tr>
 <tr><td></td><td></td><td>* $\verifier$ responds with a challenge $c_j$.</td></tr>
-<tr><td><a href="fn.step_2.html" title="step_2">step_2</a></td><td>2</td><td>$\prover$ sets $g’(X) = g(X, c_0, c_1, …, c_{n_a - 1}, \cdots)$.</td></tr>
+<tr><td><a href="fn.step_2.html" title="step_2">step_2</a></td><td>2</td><td>$\prover$ sets $g^\prime(X) = g(X, c_0, c_1, …, c_{n_a - 1}, \cdots)$.</td></tr>
 <tr><td><a href="fn.step_3.html" title="step_3">step_3</a></td><td>3</td><td>$\prover$ sends a commitment $R = \innerprod{\mathbf{r}}{\mathbf{G}} + [\cdot] W$ where $\mathbf{r} \in \field^n$ are the coefficients of a randomly sampled univariate polynomial $r(X)$ of degree $n - 1$.</td></tr>
-<tr><td><a href="fn.step_4.html" title="step_4">step_4</a></td><td>4</td><td>$\prover$ computes univariate polynomial $h(X) = \frac{g’(X)}{t(X)}$ of degree $n_g(n - 1) - n$.</td></tr>
+<tr><td><a href="fn.step_4.html" title="step_4">step_4</a></td><td>4</td><td>$\prover$ computes univariate polynomial $h(X) = \frac{g^\prime(X)}{t(X)}$ of degree $n_g(n - 1) - n$.</td></tr>
 <tr><td><a href="fn.step_5.html" title="step_5">step_5</a></td><td>5</td><td>$\prover$ computes at most $n - 1$ degree polynomials $h_0(X), h_1(X), …, h_{n_g - 2}(X)$ such that $h(X) = \sum\limits_{i=0}^{n_g - 2} X^{ni} h_i(X)$.</td></tr>
 <tr><td><a href="fn.step_6.html" title="step_6">step_6</a></td><td>6</td><td>$\prover$ sends commitments $H_i = \innerprod{\mathbf{h_i}}{\mathbf{G}} + [\cdot] W$ for all $i$ where $\mathbf{h_i}$ denotes the vector of coefficients for $h_i(X)$.</td></tr>
-<tr><td><a href="fn.step_7.html" title="step_7">step_7</a></td><td>7</td><td>$\verifier$ responds with challenge $x$ and computes $H’ = \sum\limits_{i=0}^{n_g - 2} [x^{ni}] H_i$.</td></tr>
-<tr><td><a href="fn.step_8.html" title="step_8">step_8</a></td><td>8</td><td>$\prover$ sets $h’(X) = \sum\limits_{i=0}^{n_g - 2} x^{ni} h_i(X)$.</td></tr>
-<tr><td><a href="fn.step_9.html" title="step_9">step_9</a></td><td>9</td><td>$\prover$ sends $r = r(x)$ and for all $i \in [0, n_a)$ sends $\mathbf{a_i}$ such that $(\mathbf{a_i})_j = a’_i(\omega^{(\mathbf{p_i})_j} x)$ for all $j \in [0, n_e - 1]$.</td></tr>
+<tr><td><a href="fn.step_7.html" title="step_7">step_7</a></td><td>7</td><td>$\verifier$ responds with challenge $x$ and computes $H^\prime = \sum\limits_{i=0}^{n_g - 2} [x^{ni}] H_i$.</td></tr>
+<tr><td><a href="fn.step_8.html" title="step_8">step_8</a></td><td>8</td><td>$\prover$ sets $h^\prime(X) = \sum\limits_{i=0}^{n_g - 2} x^{ni} h_i(X)$.</td></tr>
+<tr><td><a href="fn.step_9.html" title="step_9">step_9</a></td><td>9</td><td>$\prover$ sends $r = r(x)$ and for all $i \in [0, n_a)$ sends $\mathbf{a_i}$ such that $(\mathbf{a_i})_j = a^\prime_i(\omega^{(\mathbf{p_i})_j} x)$ for all $j \in [0, n_e - 1]$.</td></tr>
 <tr><td><a href="fn.step_10.html" title="step_10">step_10</a></td><td>10</td><td>For all $i \in [0, n_a)$ $\prover$ and $\verifier$ set $s_i(X)$ to be the lowest degree univariate polynomial defined such that $s_i(\omega^{(\mathbf{p_i})_j} x) = (\mathbf{a_i})_j$ for all $j \in [0, n_e - 1)$.</td></tr>
 <tr><td><a href="fn.step_11.html" title="step_11">step_11</a></td><td>11</td><td>$\verifier$ responds with challenges $x_1, x_2$ and initializes $Q_0, Q_1, …, Q_{n_q - 1} = \zero$.</td></tr>
 <tr><td></td><td></td><td>* Starting at $i=0$ and ending at $n_a - 1$ $\verifier$ sets $Q_{\sigma(i)} := [x_1] Q_{\sigma(i)} + A_i$.</td></tr>
-<tr><td></td><td></td><td>* $\verifier$ finally sets $Q_0 := [x_1^2] Q_0 + [x_1] H’ + R$.</td></tr>
+<tr><td></td><td></td><td>* $\verifier$ finally sets $Q_0 := [x_1^2] Q_0 + [x_1] H^\prime + R$.</td></tr>
 <tr><td><a href="fn.step_12.html" title="step_12">step_12</a></td><td>12</td><td>$\prover$ initializes $q_0(X), q_1(X), …, q_{n_q - 1}(X) = 0$.</td></tr>
-<tr><td></td><td></td><td>* Starting at $i=0$ and ending at $n_a - 1$ $\prover$ sets $q_{\sigma(i)} := x_1 q_{\sigma(i)} + a’(X)$.</td></tr>
-<tr><td></td><td></td><td>* $\prover$ finally sets $q_0(X) := x_1^2 q_0(X) + x_1 h’(X) + r(X)$.</td></tr>
+<tr><td></td><td></td><td>* Starting at $i=0$ and ending at $n_a - 1$ $\prover$ sets $q_{\sigma(i)} := x_1 q_{\sigma(i)} + a^\prime(X)$.</td></tr>
+<tr><td></td><td></td><td>* $\prover$ finally sets $q_0(X) := x_1^2 q_0(X) + x_1 h^\prime(X) + r(X)$.</td></tr>
 <tr><td>[step_13]</td><td>13</td><td>$\prover$ and $\verifier$ initialize $r_0(X), r_1(X), …, r_{n_q - 1}(X) = 0$.</td></tr>
 <tr><td></td><td></td><td>* Starting at $i = 0$ and ending at $n_a - 1$ $\prover$ and $\verifier$ set $r_{\sigma(i)}(X) := x_1 r_{\sigma(i)}(X) + s_i(X)$.</td></tr>
-<tr><td></td><td></td><td>* Finally $\prover$ and $\verifier$ set $r_0 := x_1^2 r_0 + x_1 h + r$ and where $h$ is computed by $\verifier$ as $\frac{g’(x)}{t(x)}$ using the values $r, \mathbf{a}$ provided by $\prover$.</td></tr>
-<tr><td><a href="fn.step_14.html" title="step_14">step_14</a></td><td>14</td><td>$\prover$ sends $Q’ = \innerprod{\mathbf{q’}}{\mathbf{G}} + [\cdot] W$ where $\mathbf{q’}$ defines the coefficients of the polynomial $q’(X) = \sum\limits_{i=0}^{n_q - 1}  x_2^i \left( \frac {q_i(X) - r_i(X)} {\prod\limits_{j=0}^{n_e - 1} \left( X - \omega^{\left( \mathbf{q_i} \right)_j} x \right) } \right) $</td></tr>
+<tr><td></td><td></td><td>* Finally $\prover$ and $\verifier$ set $r_0 := x_1^2 r_0 + x_1 h + r$ and where $h$ is computed by $\verifier$ as $\frac{g^\prime(x)}{t(x)}$ using the values $r, \mathbf{a}$ provided by $\prover$.</td></tr>
+<tr><td><a href="fn.step_14.html" title="step_14">step_14</a></td><td>14</td><td>$\prover$ sends $Q^\prime = \innerprod{\mathbf{q^\prime}}{\mathbf{G}} + [\cdot] W$ where $\mathbf{q^\prime}$ defines the coefficients of the polynomial $q^\prime(X) = \sum\limits_{i=0}^{n_q - 1}  x_2^i \left( \frac {q_i(X) - r_i(X)} {\prod\limits_{j=0}^{n_e - 1} \left( X - \omega^{\left( \mathbf{q_i} \right)_j} x \right) } \right) $</td></tr>
 <tr><td><a href="fn.step_15.html" title="step_15">step_15</a></td><td>15</td><td>$\verifier$ responds with challenge $x_3$.</td></tr>
 <tr><td><a href="fn.step_16.html" title="step_16">step_16</a></td><td>16</td><td>$\prover$ sends $\mathbf{u} \in \field^{n_q}$ such that $\mathbf{u}_i = q_i(x_3)$ for all $i \in [0, n_q)$.</td></tr>
 <tr><td><a href="fn.step_17.html" title="step_17">step_17</a></td><td>17</td><td>$\verifier$ responds with challenge $x_4$.</td></tr>
-<tr><td><a href="fn.step_18.html" title="step_18">step_18</a></td><td>18</td><td>$\verifier$ sets $P = Q’ + x_4 \sum\limits_{i=0}^{n_q - 1} [x_4^i] Q_i$ and $v = \sum\limits_{i=0}^{n_q - 1} \left( x_2^i \left( \frac { \mathbf{u}<em>i - r_i(x_3) } {\prod\limits</em>{j=0}^{n_e - 1} \left( x_3 - \omega^{\left( \mathbf{q_i} \right)<em>j} x \right) } \right) \right) + x_4 \sum\limits</em>{i=0}^{n_q - 1} x_4 \mathbf{u}_i $</td></tr>
-<tr><td><a href="fn.step_19.html" title="step_19">step_19</a></td><td>19</td><td>$\prover$ sets $p(X) = q’(X) + [x_4] \sum\limits_{i=0}^{n_q - 1} x_4^i q_i(X)$.</td></tr>
+<tr><td><a href="fn.step_18.html" title="step_18">step_18</a></td><td>18</td><td>$\verifier$ sets $P = Q^\prime + x_4 \sum\limits_{i=0}^{n_q - 1} [x_4^i] Q_i$ and $v = \sum_{i=0}^{n_q-1} \left( x_2^i\frac{\mathbf{u_i} - r_i(x_3)}{\prod_{j=0}^{n_e-1}\left( x_3 - \omega^{\left( \mathbf{q_i}_j \right)_j} x \right)} + x_4 \mathbf{u_i} \right)$ (note: we use a slightly different notation for v, due to KaTeX funkyness)</td></tr>
+<tr><td><a href="fn.step_19.html" title="step_19">step_19</a></td><td>19</td><td>$\prover$ sets $p(X) = q^\prime(X) + [x_4] \sum\limits_{i=0}^{n_q - 1} x_4^i q_i(X)$.</td></tr>
 <tr><td><a href="fn.step_20.html" title="step_20">step_20</a></td><td>20</td><td>$\prover$ samples a random polynomial $s(X)$ of degree $n - 1$ with a root at $x_3$ and sends a commitment $S = \innerprod{\mathbf{s}}{\mathbf{G}} + [\cdot] W$ where $\mathbf{s}$ defines the coefficients of $s(X)$.</td></tr>
 <tr><td><a href="fn.step_21.html" title="step_21">step_21</a></td><td>21</td><td>$\verifier$ responds with challenges $\xi, z$.</td></tr>
-<tr><td><a href="fn.step_22.html" title="step_22">step_22</a></td><td>22</td><td>$\verifier$ sets $P’ = P - [v] \mathbf{G}_0 + [\xi] S$.</td></tr>
-<tr><td><a href="fn.step_23.html" title="step_23">step_23</a></td><td>23</td><td>$\prover$ sets $p’(X) = p(X) - p(x_3) + \xi s(X)$ (where $p(x_3)$ should correspond with the verifier’s computed value $v$).</td></tr>
-<tr><td><a href="fn.step_24.html" title="step_24">step_24</a></td><td>24</td><td>Initialize $\mathbf{p’}$ as the coefficients of $p’(X)$ and $\mathbf{G’} = \mathbf{G}$ and $\mathbf{b} = (x_3^0, x_3^1, …, x_3^{n - 1})$. $\prover$ and $\verifier$ will interact in the following $k$ rounds, where in the $j$th round starting in round $j=0$ and ending in round $j=k-1$ :</td></tr>
-<tr><td></td><td></td><td>* $\prover$ sends $L_j = \innerprod{\mathbf{p’}<em>\hi}{\mathbf{G’}</em>\lo} + [z \innerprod{\mathbf{p’}<em>\hi}{\mathbf{b}</em>\lo}] U + [\cdot] W$ and $R_j = \innerprod{\mathbf{p’}<em>\lo}{\mathbf{G’}</em>\hi} + [z \innerprod{\mathbf{p’}<em>\lo}{\mathbf{b}</em>\hi}] U + [\cdot] W$.</td></tr>
+<tr><td><a href="fn.step_22.html" title="step_22">step_22</a></td><td>22</td><td>$\verifier$ sets $P^\prime = P - [v] \mathbf{G}_0 + [\xi] S$.</td></tr>
+<tr><td><a href="fn.step_23.html" title="step_23">step_23</a></td><td>23</td><td>$\prover$ sets $p^\prime(X) = p(X) - p(x_3) + \xi s(X)$ (where $p(x_3)$ should correspond with the verifier^\primes computed value $v$).</td></tr>
+<tr><td><a href="fn.step_24.html" title="step_24">step_24</a></td><td>24</td><td>Initialize $\mathbf{p^\prime}$ as the coefficients of $p^\prime(X)$ and $\mathbf{G^\prime} = \mathbf{G}$ and $\mathbf{b} = (x_3^0, x_3^1, …, x_3^{n - 1})$. $\prover$ and $\verifier$ will interact in the following $k$ rounds, where in the $j$th round starting in round $j=0$ and ending in round $j=k-1$ :</td></tr>
+<tr><td></td><td></td><td>* $\prover$ sends $L_j = \innerprod{\mathbf{p^\prime}\hi}{\mathbf{G^\prime}\lo} + [z \innerprod{\mathbf{p^\prime}\hi}{\mathbf{b}\lo}] U + [\cdot] W$ and $R_j = \innerprod{\mathbf{p^\prime}\lo}{\mathbf{G^\prime}\hi} + [z \innerprod{\mathbf{p^\prime}\lo}{\mathbf{b}\hi}] U + [\cdot] W$.</td></tr>
 <tr><td></td><td></td><td>* $\verifier$ responds with challenge $u_j$ chosen such that $1 + u_{k-1-j} x_3^{2^j}$ is nonzero.</td></tr>
-<tr><td></td><td></td><td>* $\prover$ and $\verifier$ set $\mathbf{G’} := \mathbf{G’}<em>\lo + u_j \mathbf{G’}</em>\hi$ and $\mathbf{b} := \mathbf{b}<em>\lo + u_j \mathbf{b}</em>\hi$.</td></tr>
-<tr><td></td><td></td><td>* $\prover$ sets $\mathbf{p’} := \mathbf{p’}<em>\lo + u_j^{-1} \mathbf{p’}</em>\hi$.</td></tr>
-<tr><td><a href="fn.step_25.html" title="step_25">step_25</a></td><td>25</td><td>$\prover$ sends $c = \mathbf{p’}_0$ and synthetic blinding factor $f$ computed from the elided blinding factors.</td></tr>
-<tr><td><a href="fn.step_26.html" title="step_26">step_26</a></td><td>26</td><td>$\verifier$ accepts only if $\sum_{j=0}^{k - 1} [u_j^{-1}] L_j + P’ + \sum_{j=0}^{k - 1} [u_j] R_j = [c] \mathbf{G’}_0 + [c \mathbf{b}_0 z] U + [f] W$.</td></tr>
+<tr><td></td><td></td><td>* $\prover$ and $\verifier$ set $\mathbf{G^\prime} := \mathbf{G^\prime}\lo + u_j \mathbf{G^\prime}\hi$ and $\mathbf{b} := \mathbf{b}\lo + u_j \mathbf{b}\hi$.</td></tr>
+<tr><td></td><td></td><td>* $\prover$ sets $\mathbf{p^\prime} := \mathbf{p^\prime}\lo + u_j^{-1} \mathbf{p^\prime}\hi$.</td></tr>
+<tr><td><a href="fn.step_25.html" title="step_25">step_25</a></td><td>25</td><td>$\prover$ sends $c = \mathbf{p^\prime}_0$ and synthetic blinding factor $f$ computed from the elided blinding factors.</td></tr>
+<tr><td><a href="fn.step_26.html" title="step_26">step_26</a></td><td>26</td><td>$\verifier$ accepts only if $\sum_{j=0}^{k - 1} [u_j^{-1}] L_j + P^\prime + \sum_{j=0}^{k - 1} [u_j] R_j = [c] \mathbf{G^\prime}_0 + [c \mathbf{b}_0 z] U + [f] W$.</td></tr>
 </tbody></table>
 </div></div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.PublicParams.html" title="hacspec_halo2::PublicParams struct">PublicParams</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">A struct for the public parameters, pp
 Since the group and field is currently fixed, only G, U, W is represented</div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.add_polyx.html" title="hacspec_halo2::add_polyx fn">add_polyx</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">Add two polynomials, return resulting polynomial</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.calculate_L_or_R.html" title="hacspec_halo2::calculate_L_or_R fn">calculate_L_or_R</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">Auxilary function for computing L_j or R_j in step 24</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.check_not_zero.html" title="hacspec_halo2::check_not_zero fn">check_not_zero</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">Checks if all entries in a polynomial is 0</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.commit_polyx.html" title="hacspec_halo2::commit_polyx fn">commit_polyx</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">Pedersen vector commitment (1.3 in protocol)</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.compute_h.html" title="hacspec_halo2::compute_h fn">compute_h</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">Compute the h(x) polynomial, used in step 4 and 13</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.compute_vanishing_polynomial.html" title="hacspec_halo2::compute_vanishing_polynomial fn">compute_vanishing_polynomial</a><span title="Restricted Visibility">&nbsp;🔒</span> </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.divide_leading_terms.html" title="hacspec_halo2::divide_leading_terms fn">divide_leading_terms</a><span title="Restricted Visibility">&nbsp;🔒</span> </div><div class="item-right docblock-short">divide the leading terms of two polynomials, returning a single term (e.g. 5x^3) represented as a polynomial
