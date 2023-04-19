@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"hacspec_halo2":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Unpin.html\" title=\"trait core::marker::Unpin\">Unpin</a> for <a class=\"struct\" href=\"hacspec_halo2/struct.PublicParams.html\" title=\"struct hacspec_halo2::PublicParams\">PublicParams</a>",1,["hacspec_halo2::PublicParams"]]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
