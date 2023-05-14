@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["hacspec_halo2"];
+window.ALL_CRATES = ["abstract_integers","hacspec_halo2","hacspec_lib","hacspec_pasta","num","num_bigint","num_complex","num_integer","num_iter","num_rational","num_traits","secret_integers"];

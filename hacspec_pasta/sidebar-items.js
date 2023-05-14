@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["g1_default",""],["g1_is_identity",""],["g1_on_curve",""],["g1add",""],["g1double",""],["g1mul",""],["g1neg",""]],"struct":[["Fp",""],["FpCanvas",""],["FpCurve",""],["ScalarCanvas",""]],"type":[["G1",""]]};
